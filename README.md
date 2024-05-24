@@ -1,5 +1,5 @@
 ### Скриншоты игры
-(screenshots/screenshot 1)
+![scr](https://github.com/OtryvnoyKalendar/Console-Platformer/blob/main/screenshots/screenshot%201.png)
 
 ### Общее описание
 Это консольная игра, которую я разрабатывал для практики языка C.
