@@ -1,5 +1,10 @@
 ### Скриншоты игры
-![scr](https://github.com/OtryvnoyKalendar/Console-Platformer/blob/main/screenshots/screenshot%201.png)
+![screenshot: Main menu](https://github.com/OtryvnoyKalendar/Console-Platformer/blob/main/screenshots/screenshot%201.png)
+![screenshot: Main menu](https://github.com/OtryvnoyKalendar/Console-Platformer/blob/main/screenshots/screenshot%202.png)
+![screenshot: Main menu](https://github.com/OtryvnoyKalendar/Console-Platformer/blob/main/screenshots/screenshot%203.png)
+![screenshot: Main menu](https://github.com/OtryvnoyKalendar/Console-Platformer/blob/main/screenshots/screenshot%204.png)
+![screenshot: Main menu](https://github.com/OtryvnoyKalendar/Console-Platformer/blob/main/screenshots/screenshot%205.png)
+![screenshot: Main menu](https://github.com/OtryvnoyKalendar/Console-Platformer/blob/main/screenshots/screenshot%206.png)
 
 ### Общее описание
 Это консольная игра, которую я разрабатывал для практики языка C.
