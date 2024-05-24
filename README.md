@@ -1,21 +1,15 @@
 ### Скриншоты игры
-![screenshot: Main menu](https://github.com/OtryvnoyKalendar/Console-Platformer/blob/main/screenshots/screenshot%201.png)
-![screenshot: gameplay 1](https://github.com/OtryvnoyKalendar/Console-Platformer/blob/main/screenshots/screenshot%202.png)
-![screenshot: gameplay 2](https://github.com/OtryvnoyKalendar/Console-Platformer/blob/main/screenshots/screenshot%203.png)
-![screenshot: gameplay 3](https://github.com/OtryvnoyKalendar/Console-Platformer/blob/main/screenshots/screenshot%204.png)
-![screenshot: gameplay 4](https://github.com/OtryvnoyKalendar/Console-Platformer/blob/main/screenshots/screenshot%205.png)
-![screenshot: game over](https://github.com/OtryvnoyKalendar/Console-Platformer/blob/main/screenshots/screenshot%206.png)
+Скрины | Скрины
+:--------------:|:--------------:
+![screenshot: Main menu](https://github.com/OtryvnoyKalendar/Console-Platformer/blob/main/screenshots/screenshot%201.png) | ![screenshot: gameplay 1](https://github.com/OtryvnoyKalendar/Console-Platformer/blob/main/screenshots/screenshot%202.png)
+![screenshot: gameplay 2](https://github.com/OtryvnoyKalendar/Console-Platformer/blob/main/screenshots/screenshot%204.png) | ![screenshot: gameplay 3](https://github.com/OtryvnoyKalendar/Console-Platformer/blob/main/screenshots/screenshot%205.png)
 
 ### Общее описание
-Это консольная игра, которую я разрабатывал для практики языка C.
+Это консольная игра, которую я разрабатывал для практики языка C. Игра Batet (название придумала нейроссеть) является типичным представителем жанра платформер.
 
-Игра Batet (название придумала нейроссеть) является типичным представителем жанра платформера.
-
-Игра сделана на основе видео с ютуб канала Begin End и адаптирована под Linux.
-Вот ссылки на видео:
-
-Язык Си с нуля - Урок 29 - Пишем простую игру платформер https://www.youtube.com/watch?v=7sTPrktLLBo&list=PLBOPkQsFLCR2DWRY74L03FmbRtz_Yy73_&index=30
-Язык Си с нуля - Урок 33 - Пишем игру платформер, добавляем врагов :-) https://www.youtube.com/watch?v=8QDgZ3GNlt8&list=PLBOPkQsFLCR2DWRY74L03FmbRtz_Yy73_&index=34
+Игра сделана на основе видео с ютуб канала Begin End и адаптирована под Linux. Вот *ссылки на видео*:
+[Язык Си с нуля - Урок 29 - Пишем простую игру платформер](https://www.youtube.com/watch?v=7sTPrktLLBo&list=PLBOPkQsFLCR2DWRY74L03FmbRtz_Yy73_&index=30),
+[Язык Си с нуля - Урок 33 - Пишем игру платформер, добавляем врагов :-)](https://www.youtube.com/watch?v=8QDgZ3GNlt8&list=PLBOPkQsFLCR2DWRY74L03FmbRtz_Yy73_&index=34).
 
 ### Как играть
 Чтобы начать играть, нужно открыть консоль и перейти в папку с проектом. Дальше просто выполните скрипт:
@@ -24,12 +18,12 @@ sh project_start
 ```
 Так как игра для получения состояния клавиатуры использует файл `/dev/input/by-path/platform-i8042-serio-0-event-kbd`, то нужно будет ввести пароль для запуска игры от имени суперпользователя. Иначе играть не получиться.
 
-Если вы хотите изменить код игры, например изменив макрос CHITS на 1, то вам не нужно ничего перекомпелировать и удалять вручную. После внесения изменений в файлы игры, просто снова запустите скрипт `project_start`, он всё сделает за вас.
+Если вы хотите изменить код игры, например изменив макрос `CHITS` на `1`, то вам не нужно ничего перекомпелировать и удалять вручную. После внесения изменений в файлы игры, просто снова запустите скрипт `project_start`, он всё сделает за вас.
 
 ### Технические подробности
-В процессе написания игры я сделал свои хидеры, которые можно использовать для других проектов. Заголовочный файл `core.h` нужен для включения режима ncurses консоли, а `keys.h` нужен для проверки нажатия нескольких клавиш одновременно.
+В процессе написания игры я сделал свои хидеры, которые можно использовать для других проектов. Заголовочный файл `core.h` нужен для включения в консоли режима ncurses, а `keys.h` нужен для проверки нажатия нескольких клавиш одновременно.
 
-Я добился двух важных моментов:
+Я добился следующих важных моментов:
 1. в игре нет миганий
 2. есть возможность создавать объекты и фоны разных цветов
-3. я сделал свой GetKeyState(), но из-за этого нужно будет вводить пароль.
+3. я сделал свой GetKeyState() для Linux
