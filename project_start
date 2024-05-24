@@ -1,0 +1,35 @@
+#!/bin/bash
+# версия скрипта: 1.4 sudo
+clear
+
+file_exists=false
+# Проверяем наличие файла в текущей директории
+if [ -f "main.out" ]; then
+    rm main.out
+    file_exists=true
+fi
+
+gcc main.c -o main.out -lm -lncurses
+
+# Повторно проверяем наличие файла
+if [ -f "main.out" ]; then
+	
+	echo "Вот и начинается программа:"
+	echo "---"
+	sudo ./main.out
+	echo "---"
+	echo "Программа возвращает :" $?
+	
+    rm main.out
+    if [ "$file_exists" = true ]; then
+        echo "Исполняемый файл был удалён дважды"
+    else
+        echo "Исполняемый файл был удалён после завершения работы программы"
+    fi
+else
+    if [ "$file_exists" = true ]; then
+        echo "Исполняемый файл был удалён только перед началом работы программы"
+    else
+        echo "Исполняемых файлов найдено не было"
+    fi
+fi
