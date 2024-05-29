@@ -11,7 +11,10 @@
 // мои объявления
 #include "main.h"
 
+// настройка консоли
+
 void initConsoleMode() {
+	setConsoleSize(MAP_WIDTH, MAP_HEIGHT);
 	OpenNcursesMode();
 	OpenKeysMode();
 }
@@ -25,7 +28,20 @@ void BeforeCloseGame() {
 	quitConsoleMode();
 }
 
-// рисование карты
+// цвета
+
+void clearMapColor() {
+	for(int i=0; i<MAP_WIDTH; i++)
+		for(int j=0; j<MAP_HEIGHT; j++)
+			mapColors[j][i] = COLOR_STANDARD;
+}
+
+void setBackgroundColorForTime(int backgroundColor, int timerNew) {
+	backgroundEffectTime = timerNew;
+	setBackgroundColor(backgroundColor);
+}
+
+// графика
 
 int isMapCellExists(int y, int x) {
 	return ( x >= 0 && x < MAP_WIDTH && y >= 0 &&  y < MAP_HEIGHT);
@@ -45,7 +61,7 @@ void showMap() {
 	int color;
 	for(int i=0; i<MAP_HEIGHT; i++)
 		for(int j=0; j<MAP_WIDTH; j++) {
-			color = mapColors[i][j];  // был COLOR_STANDARD
+			color = mapColors[i][j];  // COLOR_STANDARD
 			if(j > 0 && color == mapColors[i][j-1])
 				color = -1;
 				
@@ -53,10 +69,6 @@ void showMap() {
 		}
 	refresh();
 }
-
-
-
-// код Антона
 
 void clearMap() {
 	for(int i=0; i<MAP_WIDTH; i++)
@@ -66,6 +78,81 @@ void clearMap() {
 		sprintf(map[i], "%s", map[0]);
 }
 
+// вывод текста на экран
+
+void putText(const char *message, int ystart, int xstart, int color) {
+	for(int i=0; message[i]!='\0'; i++)
+		if (isMapCellExists(ystart, xstart+i)) {
+			map[ystart][xstart+i] = message[i];
+			mapColors[ystart][xstart+i] = color;
+		}
+}
+
+void showMessage(const char* text, int gameDelayTime, int backgroundColor) {
+	if(backgroundColor > 0 && backgroundColor < 8)
+		setBackgroundColor(backgroundColor);
+	
+	clearMapColor();
+	clearMap();
+	
+	putText(("%s", text), (int)(MAP_HEIGHT/2-1), (int)(MAP_WIDTH/2-strlen(text)/2)
+	,COLOR_MENUTEXT);
+	showMap();
+	refresh();
+	
+	napms(gameDelayTime);
+	
+	if(backgroundColor > 0 && backgroundColor < 8)
+		setBackgroundColor(COLOR_BACKGROUND);
+	
+	clearMapColor();
+	clearMap();
+}
+
+void showGameplayInformation() {
+	char formattedMessage[100];
+	
+	sprintf(formattedMessage, "level: %d", level);
+	putText(formattedMessage, 1, 1, COLOR_MENUTEXT);
+	
+	sprintf(formattedMessage, "score: %d", score);
+	putText(formattedMessage, 2, 1, COLOR_MENUTEXT);
+	
+	putText(("%s", nickname), (int)round(mario.y-2.0), (int)(mario.x-strlen(nickname)/2+1), COLOR_MENUTEXT);
+}
+
+void showMenu() {
+	char formattedMessage[100];
+	if(menu == GAMEMODE_MENU_START) {
+		for(int i=0; i<7; i++) {
+			putText(logo[i], 2+i, MAP_WIDTH/2-strlen(logo[i])/2+1, COLOR_MENUTEXT);
+		}
+		
+		sprintf(formattedMessage, "Console platformer");
+		putText(formattedMessage, MAP_HEIGHT/2, MAP_WIDTH/2-strlen(formattedMessage)/2+1, COLOR_MENUTEXT);
+		
+		sprintf(formattedMessage, "Press [E] to play");
+		putText(formattedMessage, MAP_HEIGHT/2+2, MAP_WIDTH/2-strlen(formattedMessage)/2+1, COLOR_MENUTEXT);
+		
+		sprintf(formattedMessage, "Press [Q] to pause");
+		putText(formattedMessage, MAP_HEIGHT/2+3, MAP_WIDTH/2-strlen(formattedMessage)/2+1, COLOR_MENUTEXT);
+		
+		sprintf(formattedMessage, "Press [Esc] to exit");
+		putText(formattedMessage, MAP_HEIGHT/2+4, MAP_WIDTH/2-strlen(formattedMessage)/2+1, COLOR_MENUTEXT);
+	}
+	else if(menu == GAMEMODE_MENU_PAUSE) {
+		sprintf(formattedMessage, "Paused");
+		putText(formattedMessage, MAP_HEIGHT/3, MAP_WIDTH/2-strlen(formattedMessage)/2+1, COLOR_MENUTEXT);
+		
+		sprintf(formattedMessage, "Press [E] to return to the game");
+		putText(formattedMessage, MAP_HEIGHT/3+2, MAP_WIDTH/2-strlen(formattedMessage)/2+1, COLOR_MENUTEXT);
+		
+		sprintf(formattedMessage, "Press [Esc] to exit.");
+		putText(formattedMessage, MAP_HEIGHT/3+3, MAP_WIDTH/2-strlen(formattedMessage)/2+1, COLOR_MENUTEXT);
+	}
+}
+
+// основная логика - код из видеоурока
 
 void setObjectPos(tObject *obj, float xPos, float yPos) {
 	(*obj).x = xPos;
@@ -88,7 +175,6 @@ int isCollision(tObject obj1, tObject obj2) {
 }
 
 void createLevel();
-void showMessage(const char* text, int gameDelayTime, int backgroundColor);
 
 tObject* getNewBrick() {
 	brickLenght++;
@@ -141,11 +227,6 @@ void deleteMoving(int i) {
 		moving[j] = moving[j+1];
 	
 	movingLenght--;
-}
-
-void setBackgroundColorForTime(int backgroundColor, int timerNew) {
-	backgroundEffectTime = timerNew;
-	setBackgroundColor(backgroundColor);
 }
 
 void marioCollision() {
@@ -225,7 +306,7 @@ void horizonMoveMap(float dx) {
 		moving[i].x += dx;
 }
 
-// не хотел, но пишу
+// не хотел, но пишу - создание уровней
 
 void createLevel() {	
 	initObject(&mario, 39, 10, 3, 3, SYMBOL_PLAYER, COLOR_PLAYER);
@@ -343,42 +424,32 @@ void createLevel() {
 	}
 }
 
-// добавляю цвета
-void clearMapColor() {
-	for(int i=0; i<MAP_WIDTH; i++)
-		for(int j=0; j<MAP_HEIGHT; j++)
-			mapColors[j][i] = COLOR_STANDARD;
-}
-// добавляю цвета
+// действия игровых объектов
 
-void putText(const char *message, int ystart, int xstart, int color) {
-	for(int i=0; message[i]!='\0'; i++)
-		if (isMapCellExists(ystart, xstart+i)) {
-			map[ystart][xstart+i] = message[i];
-			mapColors[ystart][xstart+i] = color;
+void doObjectsActions() {
+	if(mario.y > MAP_HEIGHT)
+		playerDead();
+	
+	vertMoveObject(&mario);
+	marioCollision();
+	PutObjectOnMap(mario);
+	
+	for(int i=0; i<brickLenght; i++)
+		PutObjectOnMap(brick[i]);
+	
+	for(int i=0; i<movingLenght; i++) {
+		vertMoveObject(moving + i);
+		horizonMoveObject(moving + i);
+		if(moving[i].y > MAP_HEIGHT) {
+			deleteMoving(i);
+			i--;
+			continue;
 		}
+		PutObjectOnMap(moving[i]);
+	}
 }
 
-void showMessage(const char* text, int gameDelayTime, int backgroundColor) {
-	if(backgroundColor > 0 && backgroundColor < 8)
-		setBackgroundColor(backgroundColor);
-	
-	clearMapColor();
-	clearMap();
-	
-	putText(("%s", text), (int)(MAP_HEIGHT/2-1), (int)(MAP_WIDTH/2-strlen(text)/2)
-	,COLOR_MENUTEXT);
-	showMap();
-	refresh();
-	
-	napms(gameDelayTime);
-	
-	if(backgroundColor > 0 && backgroundColor < 8)
-		setBackgroundColor(COLOR_BACKGROUND);
-	
-	clearMapColor();
-	clearMap();
-}
+// управление
 
 void GameControl(tObject *obj) {
 	RefreshKeyboardStatus();
@@ -405,82 +476,14 @@ void GameControl(tObject *obj) {
 	}
 }
 
-void showMenu() {
-	char formattedMessage[100];
-	if(menu == GAMEMODE_MENU_START) {
-		for(int i=0; i<7; i++) {
-			putText(logo[i], 2+i, MAP_WIDTH/2-strlen(logo[i])/2+1, COLOR_MENUTEXT);
-		}
-		
-		sprintf(formattedMessage, "Console platformer");
-		putText(formattedMessage, MAP_HEIGHT/2, MAP_WIDTH/2-strlen(formattedMessage)/2+1, COLOR_MENUTEXT);
-		
-		sprintf(formattedMessage, "Press [E] to play");
-		putText(formattedMessage, MAP_HEIGHT/2+2, MAP_WIDTH/2-strlen(formattedMessage)/2+1, COLOR_MENUTEXT);
-		
-		sprintf(formattedMessage, "Press [Q] to pause");
-		putText(formattedMessage, MAP_HEIGHT/2+3, MAP_WIDTH/2-strlen(formattedMessage)/2+1, COLOR_MENUTEXT);
-		
-		sprintf(formattedMessage, "Press [Esc] to exit");
-		putText(formattedMessage, MAP_HEIGHT/2+4, MAP_WIDTH/2-strlen(formattedMessage)/2+1, COLOR_MENUTEXT);
-	}
-	else if(menu == GAMEMODE_MENU_PAUSE) {
-		sprintf(formattedMessage, "Paused");
-		putText(formattedMessage, MAP_HEIGHT/3, MAP_WIDTH/2-strlen(formattedMessage)/2+1, COLOR_MENUTEXT);
-		
-		sprintf(formattedMessage, "Press [E] to return to the game");
-		putText(formattedMessage, MAP_HEIGHT/3+2, MAP_WIDTH/2-strlen(formattedMessage)/2+1, COLOR_MENUTEXT);
-		
-		sprintf(formattedMessage, "Press [Esc] to exit.");
-		putText(formattedMessage, MAP_HEIGHT/3+3, MAP_WIDTH/2-strlen(formattedMessage)/2+1, COLOR_MENUTEXT);
-	}
-}
-
-void doObjectsActions() {
-	if(mario.y > MAP_HEIGHT)
-		playerDead();
-	
-	vertMoveObject(&mario);
-	marioCollision();
-	PutObjectOnMap(mario);
-	
-	for(int i=0; i<brickLenght; i++)
-		PutObjectOnMap(brick[i]);
-	
-	for(int i=0; i<movingLenght; i++) {
-		vertMoveObject(moving + i);
-		horizonMoveObject(moving + i);
-		if(moving[i].y > MAP_HEIGHT) {
-			deleteMoving(i);
-			i--;
-			continue;
-		}
-		PutObjectOnMap(moving[i]);
-	}
-}
-
-void showGameplayInformation() {
-	char formattedMessage[100];
-	
-	sprintf(formattedMessage, "level: %d", level);
-	putText(formattedMessage, 1, 1, COLOR_MENUTEXT);
-	
-	sprintf(formattedMessage, "score: %d", score);
-	putText(formattedMessage, 2, 1, COLOR_MENUTEXT);
-	
-	putText(("%s", nickname), (int)round(mario.y-2.0), (int)(mario.x-strlen(nickname)/2+1), COLOR_MENUTEXT);
-}
-
 int main() {
-	srand((unsigned) time(NULL));
-	setConsoleSize(MAP_WIDTH, MAP_HEIGHT);
-	
 	initConsoleMode();
 	initLogo();
 	
 	clearMap();
 	createLevel();
 	
+	// основной цикл игры
 	while(1) {
 		clearMapColor();
 		clearMap();
