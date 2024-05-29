@@ -1,9 +1,9 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#define GAME_DELAY_CONSTANT		30 // у Антона 10
-#define GAME_DELAY_NEXTLEVEL	600 // у Антона 1000
-#define GAME_DELAY_PLAYERDEAD	200 // у Антона 500
+#define GAME_DELAY_CONSTANT		30 // в видеоуроке 10
+#define GAME_DELAY_NEXTLEVEL	600 // в видеоуроке 1000
+#define GAME_DELAY_PLAYERDEAD	200 // в видеоуроке 500
 #define GAME_DELAY_WIN 			2000
 
 #define SYMBOL_NOTHING 		' '
@@ -55,11 +55,11 @@ int keypress = 0;
 int level = 1;
 int score = 0;
 int scorePrev = 0;
-int scoreSecretLevel = 5000;
+int scoreSecretLevel = 2000;
 char nickname[] = "changeme";
 int backgroundEffectTime = 0;
 int menu = GAMEMODE_MENU_START;
-
+int openSecretLevel = 0;
 
 typedef struct sObject {
 	float x, y;

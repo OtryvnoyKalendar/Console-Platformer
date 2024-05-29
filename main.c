@@ -214,9 +214,14 @@ void vertMoveObject(tObject *obj) {
 			
 			if(brick[i].drawSymbol == SYMBOL_NEXTLEVEL
 			&& (*obj).drawSymbol == SYMBOL_PLAYER) {
-				level++;
-				createLevel();
-				showMessage("Next level!", GAME_DELAY_NEXTLEVEL, COLOR_GREEN);
+				if(!openSecretLevel) {
+					level++;
+					createLevel();
+					showMessage("Next level!", GAME_DELAY_NEXTLEVEL, COLOR_GREEN);
+				} else {
+					showMessage("You have completely completed the game!", GAME_DELAY_NEXTLEVEL*5, COLOR_GREEN);
+					CloseGame();
+				}
 			}
 			break;
 		}
@@ -310,18 +315,64 @@ void horizonMoveMap(float dx) {
 
 void createLevel() {	
 	initObject(&mario, 39, 10, 3, 3, SYMBOL_PLAYER, COLOR_PLAYER);
+	
 	brickLenght = 0;
 	movingLenght = 0;
 	scorePrev = score;
 	
 	if(score >= scoreSecretLevel) {
-		showMessage("Is this the end?!", GAME_DELAY_WIN, COLOR_CYAN);
+		if(openSecretLevel == 0) {
+			showMessage("Is this the end?!", GAME_DELAY_WIN, COLOR_CYAN);
+			openSecretLevel = 1;
+		}
+		//initObject(getNewBrick(), 60, 14, 450, 3, SYMBOL_EMPTYBLOCK, COLOR_BARRIER); // чит
 		
 		initObject(getNewBrick(), 15, 20, 45, 5, SYMBOL_BARRIER, COLOR_BARRIER);
 		initObject(getNewMoving(), 20, 10, 8, 5, SYMBOL_ENEMY, COLOR_PLAYER);
 		
-		score = 0;
-		scorePrev = 0;
+		initObject(getNewBrick(), 90, 20, 30, 5, SYMBOL_BARRIER, COLOR_BARRIER);
+		initObject(getNewBrick(), 101, 5, 5, 3, SYMBOL_MONEYBLOCK, COLOR_ENEMY);
+		
+		initObject(getNewBrick(), 160, 20, 15, 5, SYMBOL_BARRIER, COLOR_BARRIER);
+		initObject(getNewBrick(), 160, 12, 5, 3, SYMBOL_MONEYBLOCK, COLOR_MONEYBLOCK);
+		
+		initObject(getNewBrick(), 200, 20, 10, 5, SYMBOL_BARRIER, COLOR_BARRIER);
+		initObject(getNewBrick(), 200, 12, 5, 3, SYMBOL_MONEYBLOCK, COLOR_MONEYBLOCK);
+		
+		initObject(getNewBrick(), 240, 20, 7, 5, SYMBOL_BARRIER, COLOR_BARRIER);
+		initObject(getNewBrick(), 240, 12, 5, 3, SYMBOL_MONEYBLOCK, COLOR_MONEYBLOCK);
+		
+		initObject(getNewBrick(), 280, 20, 5, 5, SYMBOL_BARRIER, COLOR_BARRIER);
+		initObject(getNewBrick(), 280, 12, 5, 3, SYMBOL_MONEYBLOCK, COLOR_MONEYBLOCK);
+		
+		initObject(getNewBrick(), 320, 20, 3, 5, SYMBOL_BARRIER, COLOR_BARRIER);
+		initObject(getNewBrick(), 320, 12, 5, 3, SYMBOL_MONEYBLOCK, COLOR_MONEYBLOCK);
+		
+		initObject(getNewBrick(), 360, 15, 30, 5, SYMBOL_BARRIER, COLOR_BARRIER);
+		initObject(getNewBrick(), 390, 10, 30, 5, SYMBOL_BARRIER, COLOR_BARRIER);
+		
+		initObject(getNewBrick(), 430, 20, 80, 5, SYMBOL_BARRIER, COLOR_BARRIER);
+		initObject(getNewMoving(), 440, 15, 8, 5, SYMBOL_ENEMY, COLOR_PLAYER);
+		initObject(getNewMoving(), 450, 15, 3, 2, SYMBOL_ENEMY, COLOR_ENEMY);
+		initObject(getNewMoving(), 460, 15, 3, 2, SYMBOL_ENEMY, COLOR_ENEMY);
+		initObject(getNewMoving(), 470, 15, 3, 2, SYMBOL_ENEMY, COLOR_ENEMY);
+		initObject(getNewMoving(), 480, 15, 3, 2, SYMBOL_ENEMY, COLOR_ENEMY);
+		initObject(getNewMoving(), 490, 15, 3, 2, SYMBOL_ENEMY, COLOR_ENEMY);
+		initObject(getNewMoving(), 500, 15, 3, 2, SYMBOL_ENEMY, COLOR_ENEMY);
+		
+		initObject(getNewBrick(), 520, 20, 15, 5, SYMBOL_BARRIER, COLOR_BARRIER);
+		initObject(getNewBrick(), 535, 15, 15, 10, SYMBOL_BARRIER, COLOR_BARRIER);
+		initObject(getNewBrick(), 550, 10, 15, 15, SYMBOL_BARRIER, COLOR_BARRIER);
+		
+		initObject(getNewBrick(), 565, 20, 15, 3, SYMBOL_NEXTLEVEL, COLOR_NEXTLEVEL);
+		
+		initObject(getNewBrick(), 580, 10, 15, 15, SYMBOL_BARRIER, COLOR_BARRIER);
+		initObject(getNewBrick(), 595, 15, 15, 10, SYMBOL_BARRIER, COLOR_BARRIER);
+		initObject(getNewBrick(), 610, 20, 15, 5, SYMBOL_BARRIER, COLOR_BARRIER);
+		
+		initObject(getNewMoving(), 530, 5, 3, 2, SYMBOL_ENEMY, COLOR_MENUTEXT);
+		initObject(getNewMoving(), 540, 5, 3, 2, SYMBOL_ENEMY, COLOR_MENUTEXT);
+		initObject(getNewMoving(), 560, 5, 3, 2, SYMBOL_ENEMY, COLOR_MENUTEXT);
 	}
 	else if (level == 1) {		
 		initObject(getNewBrick(), 20, 20, 40, 5, SYMBOL_BARRIER, COLOR_BARRIER);
