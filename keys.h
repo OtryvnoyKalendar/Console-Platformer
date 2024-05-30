@@ -24,7 +24,7 @@ static inline int is_bit_set(unsigned long *array, int bit) {
 int fd, ret;
 unsigned long key_state[BITS_TO_LONGS(KEY_CNT)];
 
-// Открываем устройство клавиатуры
+// Методы для начала работы с библиотекой и завершением работы
 void OpenKeysMode() {
 	fd = open("/dev/input/by-path/platform-i8042-serio-0-event-kbd", O_RDONLY);
 	if (fd == -1)
