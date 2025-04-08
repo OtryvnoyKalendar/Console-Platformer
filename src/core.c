@@ -1,12 +1,8 @@
-#ifndef CORE_H
-#define CORE_H
+#include <signal.h> // signal
+#include <stdio.h> // printf
+#include <stdlib.h> // exit
 
-// карта игры
-
-#define MAP_HEIGHT	24
-#define MAP_WIDTH	80
-
-char map[MAP_HEIGHT][MAP_WIDTH+1];
+#include "core.h"
 
 // закрытие игры
 
@@ -15,19 +11,15 @@ void BeforeCloseGame();
 void ErrorCloseGame(const char* message) {
 	BeforeCloseGame();
 	printf("Ошибка: %s\n", message);
-	
 	exit(1);
 }
 
 void CloseGame() {
 	BeforeCloseGame();
-	
 	exit(1);
 }
 
 // сигналы
-
-#include <signal.h> // для signal()
 
 volatile sig_atomic_t signal_status = 0;
 
@@ -48,15 +40,6 @@ void CheckSignals() {
 }
 
 // цвета
-
-#define COLOR_BLACK		0
-#define COLOR_RED		1
-#define COLOR_GREEN		2
-#define COLOR_YELLOW	3
-#define COLOR_BLUE		4
-#define COLOR_MAGENTA	5
-#define COLOR_CYAN		6
-#define COLOR_WHITE		7
 
 void setBackgroundColor(int BackgroundColor) {
 	init_pair(COLOR_BLACK, COLOR_BLACK, BackgroundColor);
@@ -108,4 +91,3 @@ void setConsoleSize(int consoleWidth, int consoleHeight) {
 	printf("\e[8;%d;%dt", consoleHeight, consoleWidth);
 }
 
-#endif // CORE_H

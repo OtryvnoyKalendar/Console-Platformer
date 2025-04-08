@@ -37,6 +37,8 @@
 #define GAMEMODE_PLAY 		1
 #define GAMEMODE_MENU_PAUSE 2
 
+void BeforeCloseGame();
+
 char logo[7][35];
 
 void initLogo() {

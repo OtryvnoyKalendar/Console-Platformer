@@ -1,17 +1,15 @@
-#ifndef KEYS_H
-#define KEYS_H
-
-// перед закрытием игры
-void BeforeCloseGame();
-
-
 // одновременное нажатие клавиш
+
+#include "keys.h"
+#include "core.h"
 
 #include <unistd.h>
 #include <fcntl.h>
-#include <linux/input.h>
 #include <sys/ioctl.h>
 #include <linux/kernel.h>
+
+#include <stdio.h>
+#include <stdint.h>
 
 #define DIV_ROUND_UP(n,d) (((n) + (d) - 1) / (d))
 #define BITS_PER_BYTE 8
@@ -24,15 +22,23 @@ static inline int is_bit_set(unsigned long *array, int bit) {
 int fd, ret;
 unsigned long key_state[BITS_TO_LONGS(KEY_CNT)];
 
-// Методы для начала работы с библиотекой и завершением работы
 void OpenKeysMode() {
 	fd = open("/dev/input/by-path/platform-i8042-serio-0-event-kbd", O_RDONLY);
 	if (fd == -1)
 		ErrorCloseGame("не получилось открыть устройство клавиатуры");
 }
 
+// like std::cin.ignore();
+void IgnoreDelayedInput() {
+	for(unsigned int i = 1; i < SIZE_MAX; i++) {
+		if(getch() == EOF)
+			break;
+	}
+}
+
 void CloseKeysMode() {
 	close(fd);
+	IgnoreDelayedInput();
 }
 
 // Получаем состояние клавиатуры
@@ -45,5 +51,3 @@ void RefreshKeyboardStatus() {
 int GetKeyState(int Key) {
 	return (is_bit_set(key_state, Key));
 }
-
-#endif // KEYS_H

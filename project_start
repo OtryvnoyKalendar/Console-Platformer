@@ -9,7 +9,7 @@ if [ -f "main.out" ]; then
     file_exists=true
 fi
 
-gcc main.c -o main.out -lm -lncurses
+gcc ./src/main.c ./src/keys.c ./src/core.c -o main.out -lm -lncurses
 
 # Повторно проверяем наличие файла
 if [ -f "main.out" ]; then

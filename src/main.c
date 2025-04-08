@@ -1,8 +1,5 @@
-#include <stdlib.h> // для exit()
-#include <ncurses.h> // работа с выводом в консоль
 #include <time.h> // для time()
 #include <string.h> // для sprintf(), strlen()
-#include <signal.h> // для signal()
 #include <math.h> // для round()
 
 // мои функции
@@ -10,6 +7,8 @@
 #include "keys.h"
 // мои объявления
 #include "main.h"
+
+char map[MAP_HEIGHT][MAP_WIDTH+1];
 
 // настройка консоли
 
@@ -236,7 +235,7 @@ void deleteMoving(int i) {
 
 void marioCollision() {
 	for(int i=0; i<movingLenght; i++)
-		if(isCollision(mario, moving[i]))
+		if(isCollision(mario, moving[i])) {
 			if(moving[i].drawSymbol == SYMBOL_ENEMY) {
 				if(
 				(mario.isFly && mario.vertSpeed > 0
@@ -258,6 +257,7 @@ void marioCollision() {
 				setBackgroundColorForTime(COLOR_YELLOW,	5);
 				continue;
 			}
+		}
 }
 
 void horizonMoveObject(tObject *obj) {
